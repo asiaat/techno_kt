@@ -1,1 +1,36 @@
 
+services:
+  target:
+    image: ubuntu:24.04
+    container_name: fw_target
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      fw_net:
+        ipv4_address: 172.29.0.10
+    command: >
+      bash -c "apt-get update && 
+               apt-get install -y iptables ufw iproute2 netcat-openbsd curl tcpdump dnsutils procps && 
+               sleep infinity"
+
+  attacker:
+    image: ubuntu:24.04
+    container_name: fw_attacker
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      fw_net:
+        ipv4_address: 172.29.0.20
+    command: >
+      bash -c "apt-get update && 
+               apt-get install -y nmap netcat-openbsd curl iputils-ping && 
+               sleep infinity"
+
+networks:
+  fw_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/24
