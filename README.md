@@ -1,2 +1,2 @@
 # techno_kt
-Tehnoloogia´kolledži Küberturvalisuse materjalid
+Tallinna Tehnoloogiakolledži Küberturvalisuse materjalid
