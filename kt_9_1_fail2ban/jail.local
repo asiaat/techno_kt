@@ -1,0 +1,11 @@
+[DEFAULT]
+banaction = ufw
+bantime = 10m
+findtime = 10m
+maxretry = 3
+
+[sshd]
+enabled = true
+port = 22
+logpath = /var/log/auth.log
+backend = polling
