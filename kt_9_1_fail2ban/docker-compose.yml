@@ -1,4 +1,3 @@
-
 services:
   target:
     image: ubuntu:24.04
@@ -10,11 +9,11 @@ services:
       f2b_net:
         ipv4_address: 172.29.0.10
     command: >
-      bash -c "apt-get update && 
-               apt-get install -y ufw fail2ban openssh-server iproute2 netcat-openbsd curl rsyslog && 
-               service rsyslog start && 
-               service ssh start && 
-               sleep infinity"
+      bash -c "apt-get update &&
+      apt-get install -y ufw fail2ban openssh-server iproute2 netcat-openbsd curl rsyslog &&
+      rsyslogd &&
+      /usr/sbin/sshd &&
+      sleep infinity"
 
   attacker:
     image: ubuntu:24.04
@@ -25,9 +24,9 @@ services:
       f2b_net:
         ipv4_address: 172.29.0.20
     command: >
-      bash -c "apt-get update && 
-               apt-get install -y openssh-client netcat-openbsd curl hydra && 
-               sleep infinity"
+      bash -c "apt-get update &&
+      apt-get install -y openssh-client netcat-openbsd curl hydra &&
+      sleep infinity"
 
 networks:
   f2b_net:
