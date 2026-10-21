@@ -1,1 +1,39 @@
+services:
+  target:
+    image: ubuntu:24.04
+    container_name: f2b_target
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      f2b_net:
+        ipv4_address: 172.29.0.10
+    command: >
+      bash -c "apt-get update &&
+      apt-get install -y ufw fail2ban openssh-server iproute2 netcat-openbsd curl rsyslog &&
+      sed -i 's/module(load=\"imklog\")/#module(load=\"imklog\")/' /etc/rsyslog.conf &&
+      rm -f /run/rsyslogd.pid &&
+      rsyslogd &&
+      mkdir -p /run/sshd &&
+      /usr/sbin/sshd &&
+      sleep infinity"
 
+  attacker:
+    image: ubuntu:24.04
+    container_name: f2b_attacker
+    cap_add:
+      - NET_ADMIN
+    networks:
+      f2b_net:
+        ipv4_address: 172.29.0.20
+    command: >
+      bash -c "apt-get update &&
+      apt-get install -y openssh-client netcat-openbsd curl hydra &&
+      sleep infinity"
+
+networks:
+  f2b_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.29.0.0/24
